@@ -7,11 +7,11 @@ async fn main() {
     let listener_res = tokio::net::TcpListener::bind("0.0.0.0:3000").await;
     let listener = match listener_res {
         Ok(listener) => listener,
-        Err(e) => {
-            eprintln!("Erro ao atrelar à porta: {e}\n");
-            return;
-        },
+        Err(err) => panic!("Erro ao atrelar à porta: {err}\n"),
     };
 
-    axum::serve(listener, app).await.unwrap();
+    match axum::serve(listener, app).await {
+        Ok(()) => { },
+        Err(err) => panic!("Erro ao iniciar servidor:\n{err}\n"),
+    }
 }
