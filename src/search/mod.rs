@@ -5,7 +5,7 @@ use std::sync::Arc;
 use axum::{Json, extract::Query};
 use backend::{
     archive::{content::Content, episode::Episode},
-    assignments::{AssignmentSet, AssignmentUnit},
+    archive::assignments::{AssignmentSet, AssignmentUnit},
 };
 use rayon::{
     iter::{ParallelBridge, ParallelExtend, ParallelIterator},
