@@ -6,8 +6,8 @@ use serde::{Deserialize, Serialize};
 pub struct CastMember {
     pub r#id: String,
     pub name: String,
-    pub img_url: String,
-    pub wiki_page: String,
+    pub img_url: Option<String>,
+    pub wiki_page: Option<String>,
     pub aliases: Vec<String>,
 }
 
