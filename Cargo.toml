@@ -10,6 +10,5 @@ csv = "1.4.0"
 rapidfuzz = "0.5.0"
 rayon = "1.12.0"
 serde = { version = "1.0.228", features = ["derive", "rc"] }
-subparse = "0.7.0"
 tokio = { version = "1.52.3", features = ["full"] }
 yaml_serde = "0.10.4"
