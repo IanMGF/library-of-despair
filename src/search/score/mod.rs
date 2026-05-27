@@ -1,5 +1,5 @@
-pub mod fuzzy;
 pub mod contains;
+pub mod fuzzy;
 pub mod synonym_swap;
 
 trait ScoringLayer {

@@ -3,9 +3,10 @@ pub mod score;
 use std::sync::Arc;
 
 use axum::{Json, extract::Query};
-use backend::{
-    archive::{content::Content, episode::Episode},
-    archive::assignments::{AssignmentSet, AssignmentUnit},
+use backend::archive::{
+    assignments::{AssignmentSet, AssignmentUnit},
+    content::Content,
+    episode::Episode,
 };
 use rayon::{
     iter::{ParallelBridge, ParallelExtend, ParallelIterator},
@@ -86,7 +87,7 @@ fn search_in_episode(ep: &Episode, query: &str, result_vec: &mut Vec<SearchResul
             (
                 _i,
                 line.as_str(),
-                score::attribute_score(&query, line.as_str()),
+                score::attribute_score(query, line.as_str()),
             )
         })
         .map(map_entry_closure);
@@ -96,7 +97,7 @@ fn search_in_episode(ep: &Episode, query: &str, result_vec: &mut Vec<SearchResul
 fn map_entry_to_item(
     ep: &Episode,
     (i, score): (usize, f64),
-    &AssignmentSet(ref assignments_vec): &AssignmentSet,
+    AssignmentSet(assignments_vec): &AssignmentSet,
     lines: &[String],
 ) -> SearchResultItem {
     let line_before = if i > 0 {

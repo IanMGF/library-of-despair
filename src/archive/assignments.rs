@@ -23,7 +23,7 @@ impl From<OwnedAssignmentSet> for AssignmentSet {
 
 impl From<AssignmentSet> for OwnedAssignmentSet {
     fn from(AssignmentSet(value): AssignmentSet) -> Self {
-        let v: Vec<AssignmentUnit> = value.into_iter().cloned().collect();
+        let v: Vec<AssignmentUnit> = value.iter().cloned().collect();
         OwnedAssignmentSet(v)
     }
 }

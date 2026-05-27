@@ -12,7 +12,7 @@ async fn main() {
     };
 
     match axum::serve(listener, app).await {
-        Ok(()) => { },
+        Ok(()) => {}
         Err(err) => panic!("Erro ao iniciar servidor:\n{err}\n"),
     }
 }

@@ -19,7 +19,7 @@ pub struct Episode {
 
 impl Episode {
     pub fn get_episodes_list() -> std::io::Result<Vec<Episode>> {
-        let file: File = File::open(format!("documents/episodes.yaml"))?;
+        let file: File = File::open("documents/episodes.yaml")?;
         let episodes: Vec<Episode> = yaml_serde::from_reader(file).unwrap();
         Ok(episodes)
     }

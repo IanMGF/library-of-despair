@@ -7,9 +7,9 @@ impl ScoringLayer for ContainsScore {
             .to_ascii_lowercase()
             .contains(&query.to_ascii_lowercase())
         {
-            return 1f64;
+            1f64
         } else {
-            return 0f64;
+            0f64
         }
     }
 }
