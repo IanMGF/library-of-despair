@@ -2,9 +2,7 @@ use std::{fs::File, io, path::PathBuf};
 
 use serde::{Deserialize, Serialize};
 
-use crate::{
-    archive::assignments::OwnedAssignmentSet, archive::cast::Cast, archive::content::Content,
-};
+use crate::{archive::assignments::AssignmentSet, archive::cast::Cast, archive::content::Content};
 
 #[derive(Serialize, Deserialize)]
 pub struct EpisodeInfo {
@@ -37,10 +35,10 @@ impl EpisodeInfo {
         Ok(cast)
     }
 
-    pub fn load_assignment(&self) -> std::io::Result<OwnedAssignmentSet> {
+    pub fn load_assignment(&self) -> std::io::Result<AssignmentSet> {
         let id: &str = self.id.as_str();
         let path: PathBuf = PathBuf::from(format!("documents/{id}/assignment.csv"));
-        OwnedAssignmentSet::from_file(path)
+        AssignmentSet::from_file(path)
     }
 
     pub fn load_episode(self) -> io::Result<Episode> {
@@ -60,7 +58,7 @@ pub struct Episode {
     cast: Cast,
     info: EpisodeInfo,
     content: Content,
-    assignment: OwnedAssignmentSet,
+    assignment: AssignmentSet,
 }
 
 impl Episode {
@@ -76,7 +74,7 @@ impl Episode {
         &self.cast
     }
 
-    pub fn get_assignment(&self) -> &OwnedAssignmentSet {
+    pub fn get_assignment(&self) -> &AssignmentSet {
         &self.assignment
     }
 }

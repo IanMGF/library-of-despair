@@ -1,4 +1,4 @@
-use std::{collections::HashSet, fs::File, path::PathBuf, sync::Arc};
+use std::{collections::HashSet, fs::File, path::PathBuf};
 
 use serde::{Deserialize, Serialize};
 
@@ -10,28 +10,13 @@ pub struct AssignmentUnit {
     pub assignments: HashSet<String>,
 }
 
-pub struct AssignmentSet(pub Arc<[AssignmentUnit]>);
-
 #[derive(Serialize, Deserialize)]
-pub struct OwnedAssignmentSet(pub Vec<AssignmentUnit>);
+pub struct AssignmentSet(pub Vec<AssignmentUnit>);
 
-impl From<OwnedAssignmentSet> for AssignmentSet {
-    fn from(OwnedAssignmentSet(value): OwnedAssignmentSet) -> Self {
-        AssignmentSet(value.into())
-    }
-}
-
-impl From<AssignmentSet> for OwnedAssignmentSet {
-    fn from(AssignmentSet(value): AssignmentSet) -> Self {
-        let v: Vec<AssignmentUnit> = value.iter().cloned().collect();
-        OwnedAssignmentSet(v)
-    }
-}
-
-impl OwnedAssignmentSet {
+impl AssignmentSet {
     pub fn from_file(path: PathBuf) -> std::io::Result<Self> {
         let file = File::open(path)?;
-        let mut assignment_set: OwnedAssignmentSet = OwnedAssignmentSet(vec![]);
+        let mut assignment_set: AssignmentSet = AssignmentSet(vec![]);
         let mut assignment_rdr = csv::ReaderBuilder::new()
             .has_headers(false)
             .flexible(true)
