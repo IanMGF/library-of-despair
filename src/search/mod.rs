@@ -69,20 +69,12 @@ pub(crate) async fn search(
 fn search_in_episode(ep: &Episode, query: &str, result_vec: &mut Vec<SearchResultItem>) {
     let Content(lines) = ep.get_content();
 
-    let map_entry_closure = |entry: (usize, &str, f64)| map_entry_to_item(ep, (entry.0, entry.2));
-
     let results = lines
         .iter()
         .enumerate()
         .par_bridge()
-        .map(|(_i, line)| {
-            (
-                _i,
-                line.as_str(),
-                score::attribute_score(query, line.as_str()),
-            )
-        })
-        .map(map_entry_closure);
+        .map(|(i, line)| (i, score::attribute_score(query, line.as_str())))
+        .map(|entry: (usize, f64)| map_entry_to_item(ep, entry));
     result_vec.par_extend(results);
 }
 
