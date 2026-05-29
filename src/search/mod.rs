@@ -4,7 +4,7 @@ use std::sync::Arc;
 
 use axum::{Json, extract::Query};
 use backend::archive::{
-    assignments::{AssignmentSet, AssignmentUnit, OwnedAssignmentSet},
+    assignments::AssignmentUnit,
     content::Content,
     episode::{Episode, EpisodeInfo},
 };
