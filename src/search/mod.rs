@@ -4,9 +4,9 @@ use std::sync::Arc;
 
 use axum::{Json, extract::Query};
 use backend::archive::{
-    assignments::{AssignmentSet, AssignmentUnit},
+    assignments::{AssignmentSet, AssignmentUnit, OwnedAssignmentSet},
     content::Content,
-    episode::Episode,
+    episode::{Episode, EpisodeInfo},
 };
 use rayon::{
     iter::{ParallelBridge, ParallelExtend, ParallelIterator},
@@ -53,7 +53,11 @@ pub(crate) struct Moment {
 pub(crate) async fn search(
     Query(SearchParams { query }): Query<SearchParams>,
 ) -> Json<SearchResult> {
-    let episodes: Vec<Episode> = Episode::get_episodes_list().unwrap();
+    let episodes: Vec<Episode> = EpisodeInfo::get_episodes_list()
+        .unwrap()
+        .into_iter()
+        .map(|info| info.load_episode().unwrap())
+        .collect();
 
     let mut results: Vec<SearchResultItem> = vec![];
 
@@ -66,18 +70,9 @@ pub(crate) async fn search(
 }
 
 fn search_in_episode(ep: &Episode, query: &str, result_vec: &mut Vec<SearchResultItem>) {
-    let Content(lines) = ep.get_content().unwrap();
-    let assignment_set = ep.get_assignments().unwrap();
+    let Content(lines) = ep.get_content();
 
-    let borrowed_assignment_set = assignment_set.into();
-    let map_entry_closure = |entry: (usize, &str, f64)| {
-        map_entry_to_item(
-            ep,
-            (entry.0, entry.2),
-            &borrowed_assignment_set,
-            lines.as_slice(),
-        )
-    };
+    let map_entry_closure = |entry: (usize, &str, f64)| map_entry_to_item(ep, (entry.0, entry.2));
 
     let results = lines
         .iter()
@@ -94,27 +89,25 @@ fn search_in_episode(ep: &Episode, query: &str, result_vec: &mut Vec<SearchResul
     result_vec.par_extend(results);
 }
 
-fn map_entry_to_item(
-    ep: &Episode,
-    (i, score): (usize, f64),
-    AssignmentSet(assignments_vec): &AssignmentSet,
-    lines: &[String],
-) -> SearchResultItem {
+fn map_entry_to_item(ep: &Episode, (i, score): (usize, f64)) -> SearchResultItem {
     let line_before = if i > 0 {
         Some(line_from_assignment_and_text(
-            &assignments_vec[i - 1],
-            lines[i - 1].as_str().into(),
+            &ep.get_assignment().0[i - 1],
+            ep.get_content().0[i - 1].as_str().into(),
         ))
     } else {
         None
     };
 
-    let line: Line = line_from_assignment_and_text(&assignments_vec[i], lines[i].as_str().into());
+    let line: Line = line_from_assignment_and_text(
+        &ep.get_assignment().0[i],
+        ep.get_content().0[i].as_str().into(),
+    );
 
-    let line_after = if i < lines.len() - 1 {
+    let line_after = if i < ep.get_assignment().0.len() - 1 {
         Some(line_from_assignment_and_text(
-            &assignments_vec[i + 1],
-            lines[i + 1].as_str().into(),
+            &ep.get_assignment().0[i + 1],
+            ep.get_content().0[i + 1].as_str().into(),
         ))
     } else {
         None
@@ -133,11 +126,15 @@ fn map_entry_to_item(
     // TODO: Add episode-tracking file
     let moment: Moment = Moment {
         timestamp: timestamp_str,
-        episode_name: ep.name.as_str().into(),
-        episode_number: ep.number,
-        season_name: ep.season_name.as_str().into(),
+        episode_name: ep.get_info().name.as_str().into(),
+        episode_number: ep.get_info().number,
+        season_name: ep.get_info().season_name.as_str().into(),
         thumbnail_url: "".into(),
-        youtube_url: format!("{}&t={}s", ep.youtube_url, timestamp.num_seconds()),
+        youtube_url: format!(
+            "{}&t={}s",
+            ep.get_info().youtube_url,
+            timestamp.num_seconds()
+        ),
     };
 
     SearchResultItem {
