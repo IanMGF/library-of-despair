@@ -2,12 +2,11 @@ pub mod score;
 
 use std::sync::Arc;
 
-use axum::{Json, extract::Query};
-use backend::archive::{
-    assignments::AssignmentUnit,
-    content::Content,
-    episode::{Episode, EpisodeInfo},
+use axum::{
+    Json,
+    extract::{Query, State},
 };
+use backend::archive::{assignments::AssignmentUnit, content::Content, episode::Episode};
 use rayon::{
     iter::{ParallelBridge, ParallelExtend, ParallelIterator},
     slice::ParallelSliceMut,
@@ -51,17 +50,15 @@ pub(crate) struct Moment {
 }
 
 pub(crate) async fn search(
+    State(episodes): State<Arc<[Episode]>>,
     Query(SearchParams { query }): Query<SearchParams>,
 ) -> Json<SearchResult> {
-    let episodes: Vec<Episode> = EpisodeInfo::get_episodes_list()
-        .unwrap()
-        .into_iter()
-        .map(|info| info.load_episode().unwrap())
-        .collect();
+    let mut results: Vec<SearchResultItem> = {
+        let vec_size: usize = episodes.iter().map(|e| e.get_content().0.len()).sum();
+        Vec::with_capacity(vec_size)
+    };
 
-    let mut results: Vec<SearchResultItem> = vec![];
-
-    for episode in episodes {
+    for episode in episodes.iter() {
         search_in_episode(&episode, query.as_str(), &mut results);
     }
     results.par_sort_by(|a, b| b.score.total_cmp(&a.score));
