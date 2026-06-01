@@ -1,15 +1,16 @@
-pub mod contains;
-pub mod fuzzy;
-pub mod synonym_swap;
+use std::sync::Arc;
 
-trait ScoringLayer {
-    fn attribute_score(query: &str, line: &str) -> f64;
-}
+use crate::search::score::layers::{ScoringLayer, contains::ContainsScore, fuzzy::FuzzScore};
 
-pub fn attribute_score(query: &str, line: &str) -> f64 {
-    let mut score = 0f64;
-    let query_lowercase = query.to_ascii_lowercase();
-    score += fuzzy::FuzzScore::attribute_score(&query_lowercase, line);
-    score += contains::ContainsScore::attribute_score(&query_lowercase, line);
-    score
+pub mod layers;
+pub mod structures;
+
+pub fn attribute_scores<'a>(
+    query: &str,
+    lines: impl Iterator<Item = &'a Arc<str>>,
+) -> impl Iterator<Item = f64> {
+    let scored = lines.map(Arc::as_ref).map(|line| (line, 0f64));
+    let scored = FuzzScore::attribute_score_iter(&FuzzScore, query, scored);
+    let scored = ContainsScore::attribute_score_iter(&ContainsScore, query, scored);
+    scored.map(|(_line, score)| score)
 }
