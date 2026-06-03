@@ -33,8 +33,14 @@ type Timestamp = i64;
 #[derive(Deserialize, Serialize)]
 pub(crate) struct Line {
     time: Timestamp,
-    speakers: Arc<[Arc<str>]>,
+    speakers: Arc<[CharacterId]>,
     text: Arc<str>,
+}
+
+#[derive(Deserialize, Serialize)]
+pub(crate) struct CharacterId {
+    id: Arc<str>,
+    name: Arc<str>,
 }
 
 #[derive(Deserialize, Serialize)]

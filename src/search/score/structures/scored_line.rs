@@ -1,6 +1,9 @@
-use backend::archive::{assignments::AssignmentUnit, episode::Episode};
+use backend::archive::{
+    assignments::AssignmentUnit,
+    episode::Episode,
+};
 
-use crate::search::{Line, Moment, SearchResultItem};
+use crate::search::{CharacterId, Line, Moment, SearchResultItem};
 
 pub(crate) struct ScoredLine<'a> {
     episode: &'a Episode,
@@ -87,7 +90,13 @@ fn line_from_episode_and_line_number(episode: &Episode, line_number: usize) -> O
 
     let AssignmentUnit { time, assignments } = &assignment_set[line_number];
 
-    let speakers = assignments.clone();
+    let speakers = assignments.into_iter().map(|id| {
+        let char = episode.get_cast().get_member_by_id(id).unwrap();
+        CharacterId {
+            id: char.id.clone(),
+            name: char.name.clone(),
+        }
+    }).collect();
     let text = content[line_number].clone();
     let time = *time;
 
