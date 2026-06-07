@@ -31,6 +31,7 @@ pub(crate) struct SearchResultItem {
 
 type Timestamp = i64;
 #[derive(Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub(crate) struct Line {
     time: Timestamp,
     speakers: Arc<[CharacterId]>,
@@ -38,12 +39,14 @@ pub(crate) struct Line {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub(crate) struct CharacterId {
     id: Arc<str>,
     name: Arc<str>,
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub(crate) struct Moment {
     timestamp: i64,
     episode_name: Arc<str>,
