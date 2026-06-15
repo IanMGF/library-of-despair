@@ -22,9 +22,9 @@ pub(crate) struct SearchResult(Vec<SearchResultItem>);
 #[derive(Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub(crate) struct SearchResultItem {
-    line_before: Option<Line>,
-    line: Line,
-    line_after: Option<Line>,
+    line_before: Option<DialogueLine>,
+    line: DialogueLine,
+    line_after: Option<DialogueLine>,
     moment: Moment,
     score: f64,
 }
@@ -32,7 +32,7 @@ pub(crate) struct SearchResultItem {
 type Timestamp = i64;
 #[derive(Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
-pub(crate) struct Line {
+pub(crate) struct DialogueLine {
     time: Timestamp,
     speakers: Arc<[CharacterId]>,
     text: Arc<str>,

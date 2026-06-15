@@ -3,7 +3,7 @@ use backend::archive::{
     episode::Episode,
 };
 
-use crate::search::{CharacterId, Line, Moment, SearchResultItem};
+use crate::search::{CharacterId, DialogueLine, Moment, SearchResultItem};
 
 pub(crate) struct ScoredLine<'a> {
     episode: &'a Episode,
@@ -80,7 +80,7 @@ impl<'a> From<ScoredLine<'a>> for SearchResultItem {
     }
 }
 
-fn line_from_episode_and_line_number(episode: &Episode, line_number: usize) -> Option<Line> {
+fn line_from_episode_and_line_number(episode: &Episode, line_number: usize) -> Option<DialogueLine> {
     if episode.line_count() <= line_number {
         return None;
     }
@@ -100,7 +100,7 @@ fn line_from_episode_and_line_number(episode: &Episode, line_number: usize) -> O
     let text = content[line_number].clone();
     let time = *time;
 
-    Some(Line {
+    Some(DialogueLine {
         speakers,
         text,
         time,
