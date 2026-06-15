@@ -4,11 +4,13 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-axum = "0.8.9"
-chrono = "0.4.44"
+axum = { version = "0.8.9", features = ["macros"]}
+chrono = { version = "0.4.44", features = ["serde"] }
 csv = "1.4.0"
+dotenv_codegen = "0.15.0"
 rapidfuzz = "0.5.0"
 rayon = "1.12.0"
 serde = { version = "1.0.228", features = ["derive", "rc"] }
+sqlx = { version = "0.9.0", features = ["runtime-tokio", "tls-native-tls", "postgres"] }
 tokio = { version = "1.52.3", features = ["full"] }
 yaml_serde = "0.10.4"
