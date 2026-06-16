@@ -1,6 +1,6 @@
 mod issue;
 mod search;
-use std::{sync::Arc, time::Duration};
+use std::{env, sync::Arc, time::Duration};
 
 use axum::{
     Router,
@@ -44,7 +44,8 @@ async fn main() {
         .route("/issue", get(issue::get_issues))
         .with_state(pool_arc.clone());
 
-    let listener_res = tokio::net::TcpListener::bind("0.0.0.0:3000").await;
+    let port = env::var("PORT").unwrap_or_else(|_| "3000".to_string());
+    let listener_res = tokio::net::TcpListener::bind(format!("0.0.0.0:{port}")).await;
     let listener = match listener_res {
         Ok(listener) => listener,
         Err(err) => panic!("Erro ao atrelar à porta: {err}\n"),
