@@ -16,7 +16,7 @@ impl ScoringLayer for JaccardScore {
         let intersection = HashSet::intersection(&line_word_set, &query_word_set);
         let intersection_size = intersection.count() as f64;
 
-        return (2f64 * intersection_size) / (line_word_count + query_word_count);
+        (2f64 * intersection_size) / (line_word_count + query_word_count)
     }
 
     fn attribute_score_iter<'a>(

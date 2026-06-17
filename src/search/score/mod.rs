@@ -1,8 +1,7 @@
-use std::{fs::File, sync::Arc};
+use std::sync::Arc;
 
 use crate::search::score::layers::{
     ScoringLayer, contains::ContainsScore, fuzzy::FuzzScore, jaccard::JaccardScore,
-    synonym_swap::SynonymSwappingScore,
 };
 
 pub mod layers;

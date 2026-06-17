@@ -5,8 +5,7 @@ use crate::search::score::layers::ScoringLayer;
 pub struct FuzzScore;
 impl ScoringLayer for FuzzScore {
     fn attribute_score(&self, query: &str, line: &str) -> f64 {
-        let levenshtein_dist = levenshtein::normalized_similarity(query.chars(), line.chars());
-        levenshtein_dist
+        levenshtein::normalized_similarity(query.chars(), line.chars())
     }
 
     fn attribute_score_iter<'a>(

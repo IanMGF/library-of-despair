@@ -34,7 +34,7 @@ impl<'a> Eq for ScoredLine<'a> {}
 
 impl<'a> PartialOrd for ScoredLine<'a> {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        self.score.partial_cmp(&other.score)
+        Some(self.cmp(other))
     }
 }
 
@@ -61,7 +61,7 @@ impl<'a> From<ScoredLine<'a>> for SearchResultItem {
 
         let ep_info = episode.get_info();
         let moment: Moment = Moment {
-            timestamp: timestamp,
+            timestamp,
             episode_name: ep_info.name.clone(),
             episode_number: ep_info.number,
             season_name: ep_info.season_name.clone(),
@@ -92,7 +92,7 @@ fn line_from_episode_and_line_number(
     let AssignmentUnit { time, assignments } = &assignment_set[line_number];
 
     let speakers = assignments
-        .into_iter()
+        .iter()
         .map(|id| {
             let char = episode.get_cast().get_member_by_id(id).unwrap();
             CharacterId {

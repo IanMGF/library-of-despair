@@ -21,7 +21,7 @@ pub(crate) async fn search(
     let mut result_holder: SearchResultItemHolder<RESULT_LIMIT> = SearchResultItemHolder::new();
 
     for episode in episodes.iter() {
-        let ep_results = search_in_episode(&episode, query.as_str());
+        let ep_results = search_in_episode(episode, query.as_str());
         result_holder.extend(ep_results);
     }
 

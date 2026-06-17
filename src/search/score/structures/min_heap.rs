@@ -11,7 +11,7 @@ impl<'a, const N: usize> SearchResultItemHolder<'a, N> {
     }
 
     pub fn extend<I: Iterator<Item = ScoredLine<'a>>>(&mut self, iter: I) {
-        self.0.extend(iter.map(|item| Reverse(item)));
+        self.0.extend(iter.map(Reverse));
         while self.0.len() > N {
             self.0.pop();
         }
