@@ -12,5 +12,6 @@ rapidfuzz = "0.5.0"
 rayon = "1.12.0"
 serde = { version = "1.0.228", features = ["derive", "rc"] }
 sqlx = { version = "0.9.0", features = ["runtime-tokio", "tls-native-tls", "postgres"] }
+common_types = { path = "../common_types" }
 tokio = { version = "1.52.3", features = ["full"] }
 yaml_serde = "0.10.4"

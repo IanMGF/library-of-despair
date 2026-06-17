@@ -1,7 +1,5 @@
-use backend::archive::{
-    assignments::AssignmentUnit,
-    episode::Episode,
-};
+use backend::archive::{assignments::AssignmentUnit, episode::Episode};
+use common_types::result::Timestamp;
 
 use crate::search::{CharacterId, DialogueLine, Moment, SearchResultItem};
 
@@ -63,7 +61,7 @@ impl<'a> From<ScoredLine<'a>> for SearchResultItem {
 
         let ep_info = episode.get_info();
         let moment: Moment = Moment {
-            timestamp: timestamp / 1_000,
+            timestamp: timestamp,
             episode_name: ep_info.name.clone(),
             episode_number: ep_info.number,
             season_name: ep_info.season_name.clone(),
@@ -80,7 +78,10 @@ impl<'a> From<ScoredLine<'a>> for SearchResultItem {
     }
 }
 
-fn line_from_episode_and_line_number(episode: &Episode, line_number: usize) -> Option<DialogueLine> {
+fn line_from_episode_and_line_number(
+    episode: &Episode,
+    line_number: usize,
+) -> Option<DialogueLine> {
     if episode.line_count() <= line_number {
         return None;
     }
@@ -90,15 +91,18 @@ fn line_from_episode_and_line_number(episode: &Episode, line_number: usize) -> O
 
     let AssignmentUnit { time, assignments } = &assignment_set[line_number];
 
-    let speakers = assignments.into_iter().map(|id| {
-        let char = episode.get_cast().get_member_by_id(id).unwrap();
-        CharacterId {
-            id: char.id.clone(),
-            name: char.name.clone(),
-        }
-    }).collect();
+    let speakers = assignments
+        .into_iter()
+        .map(|id| {
+            let char = episode.get_cast().get_member_by_id(id).unwrap();
+            CharacterId {
+                id: char.id.clone(),
+                name: char.name.clone(),
+            }
+        })
+        .collect();
     let text = content[line_number].clone();
-    let time = *time;
+    let time = Timestamp(*time);
 
     Some(DialogueLine {
         speakers,

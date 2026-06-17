@@ -7,53 +7,9 @@ use axum::{
     extract::{Query, State},
 };
 use backend::archive::episode::Episode;
-use serde::{Deserialize, Serialize};
+use common_types::{query::*, result::*};
 
 use crate::search::score::structures::{min_heap::SearchResultItemHolder, scored_line::ScoredLine};
-
-#[derive(Deserialize, Serialize)]
-pub(crate) struct SearchParams {
-    pub query: String,
-}
-
-#[derive(Deserialize, Serialize)]
-pub(crate) struct SearchResult(Vec<SearchResultItem>);
-
-#[derive(Deserialize, Serialize)]
-#[serde(rename_all = "camelCase")]
-pub(crate) struct SearchResultItem {
-    line_before: Option<DialogueLine>,
-    line: DialogueLine,
-    line_after: Option<DialogueLine>,
-    moment: Moment,
-    score: f64,
-}
-
-type Timestamp = i64;
-#[derive(Deserialize, Serialize)]
-#[serde(rename_all = "camelCase")]
-pub(crate) struct DialogueLine {
-    time: Timestamp,
-    speakers: Arc<[CharacterId]>,
-    text: Arc<str>,
-}
-
-#[derive(Deserialize, Serialize)]
-#[serde(rename_all = "camelCase")]
-pub(crate) struct CharacterId {
-    id: Arc<str>,
-    name: Arc<str>,
-}
-
-#[derive(Deserialize, Serialize)]
-#[serde(rename_all = "camelCase")]
-pub(crate) struct Moment {
-    timestamp: i64,
-    episode_name: Arc<str>,
-    episode_number: u8,
-    season_name: Arc<str>,
-    video_id: Arc<str>,
-}
 
 const RESULT_LIMIT: usize = 100;
 
