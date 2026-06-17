@@ -1,6 +1,6 @@
 mod issue;
 mod search;
-use std::{env, sync::Arc, time::Duration};
+use std::{sync::Arc, time::Duration};
 
 use axum::{
     Router,
@@ -16,7 +16,8 @@ use tower_http::cors::CorsLayer;
 async fn main() {
     const DB_URL: &str = dotenv!("DATABASE_URL");
     const CORS_ORIGIN: &str = dotenv!("CORS_ORIGIN");
-    
+    const PORT: &str = dotenv!("PORT");
+
     // Connection pool for database connections
     let pool = PgPoolOptions::new()
         .max_connections(50)
@@ -51,8 +52,7 @@ async fn main() {
         .with_state(pool_arc.clone())
         .layer(cors);
 
-    let port = env::var("PORT").unwrap_or_else(|_| "3000".to_string());
-    let listener_res = tokio::net::TcpListener::bind(format!("0.0.0.0:{port}")).await;
+    let listener_res = tokio::net::TcpListener::bind(format!("0.0.0.0:{PORT}")).await;
     let listener = match listener_res {
         Ok(listener) => listener,
         Err(err) => panic!("Erro ao atrelar à porta: {err}\n"),
