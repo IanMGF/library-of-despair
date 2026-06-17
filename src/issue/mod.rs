@@ -56,9 +56,9 @@ pub struct IssueFilter {
 #[sqlx(type_name = "status")]
 #[serde(rename = "camelCase")]
 pub enum LoggedIssueStatus {
-    PENDING,
-    ACCEPTED,
-    REFUSED,
+    Pending,
+    Accepted,
+    Refused,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
