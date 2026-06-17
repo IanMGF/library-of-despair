@@ -44,7 +44,7 @@ async fn main() {
         .collect();
 
     let app = Router::new()
-        .route("/search", get(search::search))
+        .route("/line", get(search::search))
         .with_state(Arc::from(episodes))
         .route("/issue", post(issue::create_issue))
         .with_state(pool_arc.clone())
