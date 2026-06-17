@@ -18,7 +18,6 @@ impl Cast {
     pub fn get_member_by_id(&self, id: &str) -> Option<&CastMember> {
         self.0
             .iter()
-            .filter(|member| member.id.as_ref() == id)
-            .next()
+            .find(|member| member.id.as_ref() == id)
     }
 }
