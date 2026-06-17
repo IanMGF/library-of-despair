@@ -4,16 +4,19 @@ use std::{env, sync::Arc, time::Duration};
 
 use axum::{
     Router,
+    http::HeaderValue,
     routing::{get, post},
 };
 use backend::archive::episode::{Episode, EpisodeInfo};
 use dotenv_codegen::dotenv;
 use sqlx::postgres::PgPoolOptions;
+use tower_http::cors::CorsLayer;
 
 #[tokio::main]
 async fn main() {
     const DB_URL: &str = dotenv!("DATABASE_URL");
-
+    const CORS_ORIGIN: &str = dotenv!("CORS_ORIGIN");
+    
     // Connection pool for database connections
     let pool = PgPoolOptions::new()
         .max_connections(50)
@@ -21,6 +24,9 @@ async fn main() {
         .idle_timeout(Duration::from_secs(10))
         .connect(DB_URL)
         .await;
+
+    let allowed_cors_origins = [CORS_ORIGIN.parse::<HeaderValue>().unwrap()];
+    let cors = CorsLayer::new().allow_origin(allowed_cors_origins); // Allow all origins (open policy)
 
     let pool = match pool {
         Ok(p) => p,
@@ -42,7 +48,8 @@ async fn main() {
         .route("/issue", post(issue::create_issue))
         .with_state(pool_arc.clone())
         .route("/issue", get(issue::get_issues))
-        .with_state(pool_arc.clone());
+        .with_state(pool_arc.clone())
+        .layer(cors);
 
     let port = env::var("PORT").unwrap_or_else(|_| "3000".to_string());
     let listener_res = tokio::net::TcpListener::bind(format!("0.0.0.0:{port}")).await;
