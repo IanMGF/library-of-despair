@@ -66,6 +66,7 @@ impl<'a> From<ScoredLine<'a>> for SearchResultItem {
             episode_number: ep_info.number,
             season_name: ep_info.season_name.clone(),
             video_id: ep_info.video_id.clone(),
+            episode_id: ep_info.id.clone(),
         };
 
         SearchResultItem {
@@ -103,10 +104,12 @@ fn line_from_episode_and_line_number(
         .collect();
     let text = content[line_number].clone();
     let time = Timestamp(*time);
+    let number = line_number as u16;
 
     Some(DialogueLine {
         speakers,
         text,
         time,
+        number,
     })
 }
