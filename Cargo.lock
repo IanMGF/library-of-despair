@@ -227,6 +227,7 @@ checksum = "0c9ea0ac24bc397ab3c98583a3c9ba74fa56b09a4449bbe172b9b1ddb016027a"
 [[package]]
 name = "common_types"
 version = "0.1.0"
+source = "git+https://gitlab.com/biblioteca-do-desespero/common-types.git#b44d970e05aada780ae040415ad3f7ebde2515e2"
 dependencies = [
  "serde",
 ]
