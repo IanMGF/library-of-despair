@@ -54,6 +54,7 @@ pub struct IssueFilter {
 
 #[derive(sqlx::Type, Debug, Serialize, Deserialize)]
 #[sqlx(type_name = "status")]
+#[sqlx(rename_all = "camelCase")]
 #[serde(rename_all = "camelCase")]
 pub enum LoggedIssueStatus {
     Pending,
