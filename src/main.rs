@@ -4,7 +4,7 @@ use std::{sync::Arc, time::Duration};
 
 use axum::{
     Router,
-    http::HeaderValue,
+    http::{HeaderValue, header::CONTENT_TYPE},
     routing::{get, post},
 };
 use backend::archive::episode::{Episode, EpisodeInfo};
@@ -27,7 +27,7 @@ async fn main() {
         .await;
 
     let allowed_cors_origins = [CORS_ORIGIN.parse::<HeaderValue>().unwrap()];
-    let cors = CorsLayer::new().allow_origin(allowed_cors_origins); // Allow all origins (open policy)
+    let cors = CorsLayer::new().allow_origin(allowed_cors_origins).allow_headers([CONTENT_TYPE]);
 
     let pool = match pool {
         Ok(p) => p,
