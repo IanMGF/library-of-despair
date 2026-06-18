@@ -16,7 +16,7 @@ use tower_http::cors::CorsLayer;
 async fn main() {
     const DB_URL: &str = dotenv!("DATABASE_URL");
     const CORS_ORIGIN: &str = dotenv!("CORS_ORIGIN");
-    const PORT: &str = dotenv!("PORT");
+    let port = std::env::var("PORT").expect("environment variable PORT must be set");
 
     // Connection pool for database connections
     let pool = PgPoolOptions::new()
@@ -52,7 +52,7 @@ async fn main() {
         .with_state(pool_arc.clone())
         .layer(cors);
 
-    let listener_res = tokio::net::TcpListener::bind(format!("0.0.0.0:{PORT}")).await;
+    let listener_res = tokio::net::TcpListener::bind(format!("0.0.0.0:{port}")).await;
     let listener = match listener_res {
         Ok(listener) => listener,
         Err(err) => panic!("Erro ao atrelar à porta: {err}\n"),
