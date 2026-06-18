@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "SELECT episode_id, line_number, correction_suggestion, status as \"status: LoggedIssueStatus\" FROM transcription_issues",
+  "query": "SELECT episode_id, line_number, issue, status as \"status: LoggedIssueStatus\" FROM transcription_issues",
   "describe": {
     "columns": [
       {
@@ -27,12 +27,12 @@
       },
       {
         "ordinal": 2,
-        "name": "correction_suggestion",
+        "name": "issue",
         "type_info": "Text",
         "origin": {
           "Table": {
             "table": "transcription_issues",
-            "name": "correction_suggestion"
+            "name": "issue"
           }
         }
       },
@@ -41,12 +41,12 @@
         "name": "status: LoggedIssueStatus",
         "type_info": {
           "Custom": {
-            "name": "issue_status",
+            "name": "status",
             "kind": {
               "Enum": [
                 "pending",
-                "accepted",
-                "denied"
+                "ignored",
+                "corrected"
               ]
             }
           }
@@ -66,8 +66,8 @@
       false,
       false,
       false,
-      false
+      true
     ]
   },
-  "hash": "579e1e5db352b5a3be926183f7b00845dcc5e0c238b963a8da837cfc69c453d2"
+  "hash": "b56286d0bc0cbec31c7e7f0b7a3dbbb6edcdd786424c332578b86670684294bd"
 }

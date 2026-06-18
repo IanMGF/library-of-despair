@@ -27,7 +27,7 @@ pub async fn create_issue(
 
     let create_query = sqlx::query!(
         r#"
-            INSERT INTO transcription_issues (episode_id, line_number, correction_suggestion)
+            INSERT INTO transcription_issues (episode_id, line_number, issue)
             VALUES ($1, $2, $3)
         "#,
         ep_id,
@@ -57,8 +57,8 @@ pub struct IssueFilter {
 #[serde(rename = "camelCase")]
 pub enum LoggedIssueStatus {
     Pending,
-    Accepted,
-    Refused,
+    Ignored,
+    Corrected,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -66,8 +66,8 @@ pub enum LoggedIssueStatus {
 pub struct LoggedIssue {
     pub episode_id: Arc<str>,
     pub line_number: i32,
-    pub correction_suggestion: Arc<str>,
-    pub status: LoggedIssueStatus,
+    pub issue: Arc<str>,
+    pub status: Option<LoggedIssueStatus>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -81,7 +81,7 @@ pub async fn get_issues(
 ) -> Json<IssueList> {
     let retrieve_query = sqlx::query_as!(
         LoggedIssue,
-        r#"SELECT episode_id, line_number, correction_suggestion, status as "status: LoggedIssueStatus" FROM transcription_issues"#
+        r#"SELECT episode_id, line_number, issue, status as "status: LoggedIssueStatus" FROM transcription_issues"#
     );
 
     let result = retrieve_query.fetch_all(pool.as_ref()).await;

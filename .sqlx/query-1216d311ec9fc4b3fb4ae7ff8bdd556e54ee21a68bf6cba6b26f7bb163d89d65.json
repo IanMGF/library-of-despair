@@ -1,0 +1,16 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n            INSERT INTO transcription_issues (episode_id, line_number, issue)\n            VALUES ($1, $2, $3)\n        ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Int4",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "1216d311ec9fc4b3fb4ae7ff8bdd556e54ee21a68bf6cba6b26f7bb163d89d65"
+}
