@@ -68,7 +68,7 @@ pub struct LoggedIssue {
     pub episode_id: Arc<str>,
     pub line_number: i32,
     pub issue: Arc<str>,
-    pub status: Option<LoggedIssueStatus>,
+    pub status: LoggedIssueStatus,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
