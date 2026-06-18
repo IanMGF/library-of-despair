@@ -1,7 +1,6 @@
 pub mod contains;
 pub mod fuzzy;
 pub mod jaccard;
-pub mod synonym_swap;
 
 pub(super) trait ScoringLayer {
     fn attribute_score(&self, query: &str, line: &str) -> f64;
