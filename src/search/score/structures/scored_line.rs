@@ -94,12 +94,12 @@ fn line_from_episode_and_line_number(
 
     let speakers = assignments
         .iter()
-        .map(|id| {
-            let char = episode.get_cast().get_member_by_id(id).unwrap();
-            CharacterId {
-                id: char.id.clone(),
-                name: char.name.clone(),
-            }
+        .flat_map(|id| {
+            let member_by_id = episode.get_cast().get_member_by_id(id);
+            member_by_id.map(|m| CharacterId {
+                id: m.id.clone(),
+                name: m.name.clone(),
+            })
         })
         .collect();
     let text = content[line_number].clone();
