@@ -1,4 +1,4 @@
-use backend::archive::{assignments::AssignmentUnit, episode::Episode};
+use common_types::archive::{assignments::AssignmentUnit, episode::Episode};
 use common_types::result::Timestamp;
 
 use crate::search::{CharacterId, DialogueLine, Moment, SearchResultItem};

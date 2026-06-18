@@ -7,7 +7,7 @@ use axum::{
     http::{HeaderValue, header::CONTENT_TYPE},
     routing::{get, post},
 };
-use backend::archive::episode::{Episode, EpisodeInfo};
+use common_types::archive::episode::{Episode, EpisodeInfo};
 use dotenv_codegen::dotenv;
 use sqlx::postgres::PgPoolOptions;
 use tower_http::cors::CorsLayer;

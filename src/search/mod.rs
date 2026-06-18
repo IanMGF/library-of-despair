@@ -6,7 +6,7 @@ use axum::{
     Json,
     extract::{Query, State},
 };
-use backend::archive::episode::Episode;
+use common_types::archive::episode::Episode;
 use common_types::{query::*, result::*};
 
 use crate::search::score::structures::{min_heap::SearchResultItemHolder, scored_line::ScoredLine};
