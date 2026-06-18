@@ -75,7 +75,7 @@ pub struct LoggedIssue {
 #[serde(rename_all = "camelCase")]
 pub struct IssueList(Vec<LoggedIssue>);
 
-// #[axum::debug_handler]
+#[axum::debug_handler]
 pub async fn get_issues(
     Query(_filter): Query<IssueFilter>,
     State(pool): State<Arc<PgPool>>,
