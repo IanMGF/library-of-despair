@@ -9,7 +9,7 @@ use serde::{Deserialize, Serialize};
 use sqlx::PgPool;
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename = "camelCase")]
+#[serde(rename_all = "camelCase")]
 pub struct IssueData {
     pub episode_id: Arc<str>,
     pub line_number: u32,
@@ -47,14 +47,14 @@ pub async fn create_issue(
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename = "camelCase")]
+#[serde(rename_all = "camelCase")]
 pub struct IssueFilter {
     pub episode_id: Option<Arc<str>>,
 }
 
 #[derive(sqlx::Type, Debug, Serialize, Deserialize)]
 #[sqlx(type_name = "status")]
-#[serde(rename = "camelCase")]
+#[serde(rename_all = "camelCase")]
 pub enum LoggedIssueStatus {
     Pending,
     Ignored,
@@ -62,7 +62,7 @@ pub enum LoggedIssueStatus {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename = "camelCase")]
+#[serde(rename_all = "camelCase")]
 pub struct LoggedIssue {
     pub episode_id: Arc<str>,
     pub line_number: i32,
@@ -71,7 +71,7 @@ pub struct LoggedIssue {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename = "camelCase")]
+#[serde(rename_all = "camelCase")]
 pub struct IssueList(Vec<LoggedIssue>);
 
 // #[axum::debug_handler]
