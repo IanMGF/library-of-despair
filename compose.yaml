@@ -1,7 +1,0 @@
-services:
-  backend:
-    build: .
-    container_name: backend_dev
-    network_mode: host
-    env_file:
-      - .env

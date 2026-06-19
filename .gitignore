@@ -3,3 +3,4 @@
 
 /.env
 /.fragmented_dockerfiles
+/compose.yaml
