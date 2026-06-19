@@ -19,13 +19,9 @@ impl<'a> ScoredLine<'a> {
     }
 }
 
-/// A wrapper type meant to implement
-/// ordering operators (<, ==, >) using [SearchResultItem.score]
-/// as a base, as implementing them on the type itself would be
-/// semantically incoherent
+
 impl<'a> PartialEq for ScoredLine<'a> {
     fn eq(&self, other: &Self) -> bool {
-        // self.0.score.total_cmp(&other.0.score) == std::cmp::Ordering::Equal
         self.score.total_cmp(&other.score) == std::cmp::Ordering::Equal
     }
 }
