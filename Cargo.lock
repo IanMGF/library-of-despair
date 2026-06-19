@@ -156,7 +156,7 @@ dependencies = [
 [[package]]
 name = "common_types"
 version = "0.1.0"
-source = "git+https://gitlab.com/biblioteca-do-desespero/common-types.git#6522399b118d0023ed0ddd92327be7f68df760cb"
+source = "git+https://gitlab.com/biblioteca-do-desespero/common-types.git#be27e03527fb11598c786c25ae9c8119230ea5ba"
 dependencies = [
  "csv",
  "serde",
