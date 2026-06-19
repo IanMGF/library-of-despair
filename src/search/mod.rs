@@ -9,7 +9,9 @@ use axum::{
 use common_types::archive::episode::Episode;
 use common_types::{query::*, result::*};
 
-use crate::search::score::structures::{result_item_holder::SearchResultItemHolder, scored_line::ScoredLine};
+use crate::search::score::structures::{
+    result_item_holder::SearchResultItemHolder, scored_line::ScoredLine,
+};
 
 const RESULT_LIMIT: usize = 100;
 

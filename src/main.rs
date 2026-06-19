@@ -23,7 +23,9 @@ async fn main() {
         .collect();
 
     let allowed_cors_origins = [CORS_ORIGIN.parse::<HeaderValue>().unwrap()];
-    let cors = CorsLayer::new().allow_origin(allowed_cors_origins).allow_headers([CONTENT_TYPE]);
+    let cors = CorsLayer::new()
+        .allow_origin(allowed_cors_origins)
+        .allow_headers([CONTENT_TYPE]);
 
     let app = Router::new()
         .route("/line", get(search::search))
