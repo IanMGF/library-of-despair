@@ -1,3 +1,4 @@
+mod logging;
 mod search;
 use std::sync::Arc;
 
@@ -12,6 +13,8 @@ use tower_http::cors::CorsLayer;
 
 #[tokio::main]
 async fn main() {
+    logging::setup_logging();
+    
     const CORS_ORIGIN: &str = dotenv!("CORS_ORIGIN");
     let port = std::env::var("PORT").expect("environment variable PORT must be set");
 
